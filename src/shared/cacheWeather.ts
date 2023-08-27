@@ -3,7 +3,7 @@ export interface CacheItem {
   data: any;
 }
 
-const CACHE_TIME = 10 * 60 * 1000; // 10 minutes
+const CACHE_TIME = 1 * 60 * 1000; 
 const cache: Record<string, CacheItem> = {};
 
 export function setCache(key: string, data: any): void {

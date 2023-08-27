@@ -1,8 +1,9 @@
 import axios from "axios";
 
-const apiUrl = "https://api.openweathermap.org/data/2.5/weather"
+const API_BASE_URL = process.env.NEXT_PUBLIC_WEATHER_API;
+console.log(API_BASE_URL)
 const ApiFetchWeather = axios.create({
-  baseURL: apiUrl,
+  baseURL: API_BASE_URL,
 });
 
 export default ApiFetchWeather;

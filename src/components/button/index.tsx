@@ -2,42 +2,47 @@ import React from 'react';
 
 interface ButtonProps {
   title: string;
+  loading?: boolean; 
   backgroundColor?: string;
   titleColor?: string;
   size?: 'small' | 'medium' | 'large';
   onClick?: () => void;
-  type?: any
+  type?: 'submit' | 'reset' | 'button'; 
 }
 
 const CustomButton: React.FC<ButtonProps> = ({
   title,
+  loading = false, 
   backgroundColor = 'bg-blue-600',
   titleColor = 'text-white',
   size = 'medium',
   onClick,
-  type 
+  type = 'button' 
 }) => {
   let padding;
   switch (size) {
     case 'small':
-      padding = 'px-2 py-1';
+      padding = 'px-2 py-1 md:px-3 md:py-2 lg:px-4 lg:py-2';
       break;
     case 'large':
-      padding = 'px-8 py-4';
+      padding = 'px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4';
       break;
     default:
-      padding = 'px-4 py-2';
+      padding = 'px-3 py-2 md:px-4 md:py-2 lg:px-5 lg:py-3';
   }
+
 
   return (
     <button
       onClick={onClick}
-      className={`${padding} ${backgroundColor} ${titleColor} rounded-md hover:${backgroundColor}-dark focus:outline-none focus:${backgroundColor}-dark`}
+      className={`${padding} ${backgroundColor} ${titleColor} rounded-md hover:bg-blue-300 active:bg-blue-950-800 transition-all duration-200 ease-in-out`}
       type={type}
+      disabled={loading}
     >
-      {title}
+      {loading ? "Carregando..." : title}
     </button>
   );
 };
+
 
 export default CustomButton;

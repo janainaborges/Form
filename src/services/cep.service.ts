@@ -1,11 +1,9 @@
-import ApiFetchCEP from '@/core/apiCep';
+import ApiFetchCEP from "@/core/apiCep";
 
 async function getCep(streetName: any) {
-    const { data } = await ApiFetchCEP.get(
-      `${streetName}/json/`,
-    );
-    
-    return data;
-  }
+  const { data } = await ApiFetchCEP.get(`${streetName}/json/`);
 
-export default getCep
+  return data;
+}
+
+export { getCep };
