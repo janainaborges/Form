@@ -5,31 +5,34 @@ import getCep from '@/services/cep.service';
 
 interface CEPResult {
   cep: string;
+  logradouro?: string;
+  bairro?: string;
+  localidade?: string;
+  uf?: string;
+  complemento?: string;
 }
+
 
 const useCEPSearch = () => {
   const [streetName, setStreetName] = useState<string>("");
-  const [results, setResults] = useState<CEPResult[]>([]);
+  const [results, setResults] = useState<any>([]);
   
   const handleSearch = async () => {
     try {
       const data = await getCep(streetName);
-
-      if (Array.isArray(data)) {
-        const cepResults: CEPResult[] = data.map(item => ({ cep: item.cep }));
-        setResults(cepResults);
-      } else if (data.cep) {
-        setResults([{ cep: data.cep }]);
+    
+      if (data !== "") {
+        setResults(data);
       } else {
         setResults([]);
-        console.error("Não foi possível encontrar um CEP para esta rua.");
+        alert("Não foi possível encontrar um CEP para esta rua.");
       }
 
     } catch (error) {
-      console.error("Erro ao buscar CEP:", error);
+      alert("Erro ao buscar CEP");
     }
   };
-
+console.log(streetName)
   return {
     streetName,
     setStreetName,

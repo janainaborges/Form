@@ -1,6 +1,6 @@
 // Boxes.tsx
-import React, { ReactNode, useState } from "react";
-import CustomButton from "../CustomButton";
+import React, { useState } from "react";
+import CustomButton from "../button";
 import { useWeather } from "@/Hook/weather";
 
 interface BoxContent {
@@ -24,6 +24,11 @@ const Boxes: React.FC<BoxesProps> = ({ contents }) => {
       setIsFinished(true);
     }
   };
+  const handleBack = () => {
+    if (currentBox > 0) {
+      setCurrentBox(currentBox - 1);
+    }
+  };
 
   const restart = () => {
     setCurrentBox(0);
@@ -38,12 +43,34 @@ const Boxes: React.FC<BoxesProps> = ({ contents }) => {
             key={contents[currentBox].key}
             className="bg-gray-200 p-6 rounded-md"
           >
-            {weather.temp}
+            {weather?.weather && (
+              <div className="mb-4 flex flex-col items-end text-[10px]">
+                <h1 className="mr-2">
+                  Previsão do Tempo: {weather.weather.city}
+                </h1>
+                <p className="mr-2">
+                  {weather.weather.temp}°C {weather.weather.condition}
+                </p>
+                <div>
+                  <p>min:{weather.weather.min}</p>
+                  <p>max:{weather.weather.max}</p>
+                </div>
+              </div>
+            )}
+
             {contents[currentBox].container}
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-5">
+              <CustomButton
+                onClick={handleBack}
+                title="Voltar"
+                backgroundColor="bg-gray-300"
+                titleColor="text-white"
+              />
               <CustomButton
                 onClick={handleNext}
-                title={currentBox === contents.length - 1 ? "Finalize" : "Next"}
+                title={
+                  currentBox === contents.length - 1 ? "Finalizar" : "Próximo"
+                }
               />
             </div>
           </div>

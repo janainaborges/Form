@@ -6,6 +6,7 @@ interface ButtonProps {
   titleColor?: string;
   size?: 'small' | 'medium' | 'large';
   onClick?: () => void;
+  type?: any
 }
 
 const CustomButton: React.FC<ButtonProps> = ({
@@ -14,6 +15,7 @@ const CustomButton: React.FC<ButtonProps> = ({
   titleColor = 'text-white',
   size = 'medium',
   onClick,
+  type 
 }) => {
   let padding;
   switch (size) {
@@ -31,6 +33,7 @@ const CustomButton: React.FC<ButtonProps> = ({
     <button
       onClick={onClick}
       className={`${padding} ${backgroundColor} ${titleColor} rounded-md hover:${backgroundColor}-dark focus:outline-none focus:${backgroundColor}-dark`}
+      type={type}
     >
       {title}
     </button>
