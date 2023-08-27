@@ -1,3 +1,4 @@
+"use client"
 const Welcome: React.FC = () => {
   return (
     <div>

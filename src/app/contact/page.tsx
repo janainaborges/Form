@@ -1,3 +1,4 @@
+"use client"
 import CustomButton from "@/components/button";
 import { useRef, FormEvent, useState } from "react";
 

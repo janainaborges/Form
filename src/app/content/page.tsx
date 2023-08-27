@@ -1,3 +1,4 @@
+"use client"
 import useCEPSearch from "@/Hook/cep";
 import CustomButton from "@/components/button";
 import { CEPResult } from "@/types/CEP/cep.types";
