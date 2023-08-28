@@ -1,67 +1,56 @@
 import { useState, useEffect } from 'react';
+import { getWeather } from '@/services/weather.service';
 import { WeatherData } from '@/types/Weather/WeatherData.types';
-import { fetchWeatherData } from '@/services/weather.service';
 
-export const useFetchWeather = (lat: number, lon: number) => {
-  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const rawData = await fetchWeatherData(lat, lon);
-        const data: WeatherData = {
-          temp: rawData.main.temp,
-          max: rawData.main.temp_max,
-          min: rawData.main.temp_min,
-          condition: rawData.weather[0].description,
-          city: rawData.name,
-        };
-        setWeatherData(data);
-      } catch (err) {
-        setError("Error fetching weather data.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (lat !== -1 && lon !== -1) fetchData(); 
-  }, [lat, lon]);
-
-  return { weatherData, loading, error };
-};
 
 export const useWeather = () => {
-  const [coords, setCoords] = useState<{lat: number, lon: number}>({lat: -1, lon: -1});
-  const [locationError, setLocationError] = useState<string | null>(null);
-  const { weatherData, loading, error } = useFetchWeather(coords.lat, coords.lon);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchWeatherData = async (lat: number, lon: number) => {
+    try {
+      const weatherData = await getWeather(lat, lon);
+      setWeather(weatherData);
+      localStorage.setItem('weatherData', JSON.stringify(weatherData));
+    } catch (err) {
+      console.error("Error fetching weather data:", err);
+      setError("Error fetching weather data");
+    }
+  }
 
   const handleLocation = (position: GeolocationPosition) => {
-    setCoords({ 
-      lat: position.coords.latitude, 
-      lon: position.coords.longitude 
-    });
-  };
+    new Notification("Permissão de localização concedida");
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+    fetchWeatherData(lat, lon);
+  }
 
   const handleLocationError = (error: GeolocationPositionError) => {
+    new Notification("Permissão de localização negada ou ocorreu um erro");
     console.error("Error getting location:", error);
-    setLocationError("Error getting location");
+    setError("Error getting location");
   }
 
   useEffect(() => {
-    const requestPermissions = async () => {
-      const notificationPermission = await Notification.requestPermission();
+    const weatherDataFromStorage = localStorage.getItem('weatherData');
+    if (weatherDataFromStorage) {
+      setWeather(JSON.parse(weatherDataFromStorage));
+    } else {
+      const requestPermissions = async () => {
+        const notificationPermission = await Notification.requestPermission();
 
-      if (notificationPermission === 'granted') {
-        navigator.geolocation.getCurrentPosition(handleLocation, handleLocationError);
-      } else {
-        setLocationError("Permission for notifications was denied");
+        if (notificationPermission === 'granted') {
+          navigator.geolocation.getCurrentPosition(handleLocation, handleLocationError);
+        } else {
+          console.error("Permission for notifications was denied");
+          setError("Permission for notifications was denied");
+        }
       }
-    };
 
-    requestPermissions();
+      requestPermissions();
+    }
   }, []);
 
-  return { weather: weatherData, loading, error: error || locationError };
+  return { weather, error };
 };
