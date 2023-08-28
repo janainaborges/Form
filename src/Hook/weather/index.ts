@@ -26,35 +26,44 @@ export const useFetchWeather = (lat: number, lon: number) => {
       }
     };
 
-    if (lat !== -1 && lon !== -1) fetchData(); 
+    if (lat !== -1 && lon !== -1) {
+      fetchData();
+    }
   }, [lat, lon]);
 
   return { weatherData, loading, error };
 };
 
 export const useWeather = () => {
-  const [coords, setCoords] = useState<{lat: number, lon: number}>({lat: -1, lon: -1});
+  const [coords, setCoords] = useState<{ lat: number; lon: number }>({
+    lat: -1,
+    lon: -1,
+  });
   const [locationError, setLocationError] = useState<string | null>(null);
-  const { weatherData, loading, error } = useFetchWeather(coords.lat, coords.lon);
+  const { weatherData, loading } = useFetchWeather(coords.lat, coords.lon);
 
   const handleLocation = (position: GeolocationPosition) => {
-    setCoords({ 
-      lat: position.coords.latitude, 
-      lon: position.coords.longitude 
+    setCoords({
+      lat: position.coords.latitude,
+      lon: position.coords.longitude,
     });
+    setLocationError(null); 
   };
 
   const handleLocationError = (error: GeolocationPositionError) => {
     console.error("Error getting location:", error);
     setLocationError("Error getting location");
-  }
+  };
 
   useEffect(() => {
     const requestPermissions = async () => {
       const notificationPermission = await Notification.requestPermission();
 
       if (notificationPermission === 'granted') {
-        navigator.geolocation.getCurrentPosition(handleLocation, handleLocationError);
+        navigator.geolocation.getCurrentPosition(
+          handleLocation,
+          handleLocationError
+        );
       } else {
         setLocationError("Permission for notifications was denied");
       }
@@ -63,5 +72,5 @@ export const useWeather = () => {
     requestPermissions();
   }, []);
 
-  return { weather: weatherData, loading, error: error || locationError };
+  return { weather: weatherData, loading, error: locationError };
 };
