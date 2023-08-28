@@ -11,3 +11,4 @@ ViaCEP: é um serviço público gratuito oferecido pelos Correios do Brasil que 
 
  Daqui a 5 anos, vejo-me liderando uma equipe de desenvolvedores como especialista, trabalhando em soluções de vanguarda que tenham um impacto significativo na indústria. Espero também ter aprofundado meus conhecimentos em áreas específicas, no frontend e mobile, e aplicar esses conhecimentos em projetos inovadores.
 
+Obs.: Para ter acesso a localização é necessário liberar todas as permissões de localização 
