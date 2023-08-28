@@ -1,9 +1,7 @@
-"use client"
-import { useRouter } from "next/navigation";
+"use client";
 
+import HomePage from "./home/page";
 
 export default function Home() {
-  const router = useRouter()
-  router.push('/home')
-  return <div>Redirecting...</div>
+  return <HomePage />;
 }
